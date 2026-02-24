@@ -2,6 +2,16 @@
 
 All notable changes to `jira-cli` will be documented in this file.
 
+## v1.0.1 - 2026-02-24
+
+### What's Changed
+
+- Updated README to match bb-cli format with composer global install instructions
+- Added granular Atlassian API scopes documentation (Jira Platform + Jira Software)
+- Generated build artifact
+
+**Full Changelog**: https://github.com/jeffersongoncalves/jira-cli/compare/v1.0.0...v1.0.1
+
 ## v1.0.0 - 2026-02-23
 
 ### Initial Release
