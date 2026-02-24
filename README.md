@@ -1,3 +1,9 @@
+<div class="filament-hidden">
+
+![Jira CLI](https://raw.githubusercontent.com/jeffersongoncalves/jira-cli/main/art/jeffersongoncalves-jira-cli.png)
+
+</div>
+
 # Jira CLI
 
 A modern Jira Cloud CLI built with [Laravel Zero](https://laravel-zero.com/).
