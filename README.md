@@ -1,105 +1,109 @@
 # Jira CLI
 
-A feature-rich Jira Cloud CLI built with [Laravel Zero](https://laravel-zero.com/) and PHP.
+A modern Jira Cloud CLI built with [Laravel Zero](https://laravel-zero.com/).
 
-[![tests](https://github.com/jeffersongoncalves/jira-cli/actions/workflows/run-tests.yml/badge.svg)](https://github.com/jeffersongoncalves/jira-cli/actions/workflows/run-tests.yml)
-[![PHPStan](https://github.com/jeffersongoncalves/jira-cli/actions/workflows/phpstan.yml/badge.svg)](https://github.com/jeffersongoncalves/jira-cli/actions/workflows/phpstan.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+<p align="center">
+  <a href="https://github.com/jeffersongoncalves/jira-cli/actions"><img src="https://github.com/jeffersongoncalves/jira-cli/actions/workflows/run-tests.yml/badge.svg" alt="Tests" /></a>
+  <a href="https://packagist.org/packages/jeffersongoncalves/jira-cli"><img src="https://img.shields.io/packagist/dt/jeffersongoncalves/jira-cli" alt="Total Downloads" /></a>
+  <a href="https://github.com/jeffersongoncalves/jira-cli/blob/main/LICENSE"><img src="https://img.shields.io/github/license/jeffersongoncalves/jira-cli" alt="License" /></a>
+  <img src="https://img.shields.io/badge/php-%3E%3D8.2-8892BF" alt="PHP 8.2+" />
+</p>
+
+## Features
+
+- **Issues** - Create, list, view, edit, move, assign, delete, comment, worklog, link, clone, and watch issues
+- **Epics** - List, create, and manage epic associations
+- **Sprints** - List, add issues, and close sprints
+- **Boards** - List boards with project filtering
+- **Projects** - List accessible projects
+- **Releases** - List project versions and releases
+- **Authentication** - Secure credential storage with API tokens (Basic and Bearer)
+- **Browse** - Open issues and projects in the browser from the terminal
 
 ## Requirements
 
 - PHP 8.2+
-- Composer
-- A Jira Cloud instance with API access
 
 ## Installation
 
 ```bash
-# Clone the repository
-git clone git@github.com:jeffersongoncalves/jira-cli.git
-cd jira-cli
-
-# Install dependencies
-composer install
-
-# Configure credentials
-php jira auth:save
+composer global require jeffersongoncalves/jira-cli
 ```
 
-### Download PHAR (alternative)
-
-Download the latest `jira.phar` from the [Releases](https://github.com/jeffersongoncalves/jira-cli/releases) page:
+Or clone and build locally:
 
 ```bash
-chmod +x jira.phar
-mv jira.phar /usr/local/bin/jira
+git clone https://github.com/jeffersongoncalves/jira-cli.git
+cd jira-cli
+composer install
+php jira app:build jira
 ```
 
-## Authentication
+## Getting Started
 
-### Creating an API Token
+### 1. Create a Jira API Token
 
 1. Go to [https://id.atlassian.com/manage-profile/security/api-tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
 2. Click **Create API token**
-3. Give it a descriptive label (e.g. "Jira CLI")
-4. Copy the generated token
+3. Give it a descriptive label (e.g. `jira-cli`)
+4. Click **Create** and **copy it immediately** - it will only be shown once
 
-### Required OAuth / API Scopes
+The API token inherits all permissions from your Atlassian account. For OAuth 2.0 / Forge apps, the following granular scopes are required:
 
-For OAuth 2.0 (3LO) or Forge apps, the following granular scopes are required for full CLI functionality:
+> **Note:** API tokens (Basic auth) inherit all permissions from the account - no scope configuration needed. Scopes below are only for OAuth 2.0 and Forge integrations.
 
-#### Jira Platform Scopes
+**Jira Platform Scopes:**
 
-| Scope | Required For |
-|-------|-------------|
-| `read:issue:jira` | `issue:list`, `issue:view`, `issue:clone` |
-| `write:issue:jira` | `issue:create`, `issue:edit`, `issue:assign`, `issue:clone` |
-| `delete:issue:jira` | `issue:delete` |
-| `read:issue.transition:jira` | `issue:move` (list available transitions) |
-| `read:comment:jira` | `issue:view --comments` |
-| `write:comment:jira` | `issue:comment` |
-| `read:issue-worklog:jira` | `issue:worklog --list` |
-| `write:issue-worklog:jira` | `issue:worklog` |
-| `read:issue-link:jira` | `issue:view` (linked issues) |
-| `write:issue-link:jira` | `issue:link` |
-| `delete:issue-link:jira` | `issue:unlink` |
-| `read:issue-link-type:jira` | `issue:link` (list link types) |
-| `write:issue.watcher:jira` | `issue:watch` |
-| `read:project:jira` | `project:list`, `release:list` |
-| `read:project-version:jira` | `release:list` |
-| `read:user:jira` | `issue:assign me`, `me` |
+| Scope | Permission | Required for |
+|-------|-----------|-------------|
+| `read:issue:jira` | Read | List, view, and clone issues |
+| `write:issue:jira` | Write | Create, edit, assign, and clone issues |
+| `delete:issue:jira` | Delete | Delete issues |
+| `read:issue.transition:jira` | Read | List available status transitions |
+| `read:comment:jira` | Read | View issue comments |
+| `write:comment:jira` | Write | Add comments to issues |
+| `read:issue-worklog:jira` | Read | List worklogs |
+| `write:issue-worklog:jira` | Write | Log time on issues |
+| `read:issue-link:jira` | Read | View linked issues |
+| `write:issue-link:jira` | Write | Link issues together |
+| `delete:issue-link:jira` | Delete | Remove issue links |
+| `read:issue-link-type:jira` | Read | List link types |
+| `write:issue.watcher:jira` | Write | Watch issues |
+| `read:project:jira` | Read | List projects |
+| `read:project-version:jira` | Read | List releases/versions |
+| `read:user:jira` | Read | User info and assignment |
 
-#### Jira Software (Agile) Scopes
+**Jira Software (Agile) Scopes:**
 
-| Scope | Required For |
-|-------|-------------|
-| `read:board-scope:jira-software` | `board:list` |
-| `read:sprint:jira-software` | `sprint:list` |
-| `write:sprint:jira-software` | `sprint:add`, `sprint:close` |
-| `read:epic:jira-software` | `epic:list`, `epic:add`, `epic:remove` |
-| `write:epic:jira-software` | `epic:add`, `epic:remove` |
+| Scope | Permission | Required for |
+|-------|-----------|-------------|
+| `read:board-scope:jira-software` | Read | List boards |
+| `read:sprint:jira-software` | Read | List sprints |
+| `write:sprint:jira-software` | Write | Add issues to sprint, close sprint |
+| `read:epic:jira-software` | Read | List epics |
+| `write:epic:jira-software` | Write | Add/remove issues from epics |
 
-> **Note:** API tokens (Basic auth) inherit all permissions from the Atlassian account that created them - no scope configuration is needed. The scopes above are only relevant for OAuth 2.0 and Forge app integrations.
-
-### Saving Credentials
+### 2. Save your credentials
 
 ```bash
-# Interactive setup
-php jira auth:save
-
-# You'll be prompted for:
-# - Jira server URL (e.g. https://your-domain.atlassian.net)
-# - Authentication type (Basic or Bearer/PAT)
-# - Email address
-# - API Token
-# - Default project key (optional)
-# - Default board ID (optional)
-
-# View saved credentials
-php jira auth:show
+jira auth:save
 ```
 
-Credentials are stored in `~/.jira-cli/config.json` with restricted file permissions (0600).
+You will be prompted for your Jira server URL, Atlassian account email, and API token.
+
+### 3. Verify authentication
+
+```bash
+jira auth:show
+```
+
+### 4. Start using commands
+
+```bash
+jira issue:list --project=PROJ
+jira issue:view PROJ-123
+jira me
+```
 
 ## Commands
 
@@ -107,23 +111,23 @@ Credentials are stored in `~/.jira-cli/config.json` with restricted file permiss
 
 | Command | Description |
 |---------|-------------|
-| `auth:save` | Save Jira credentials interactively |
-| `auth:show` | Display saved credentials (token masked) |
+| `auth:save` | Save Jira credentials (server, email, API token) |
+| `auth:show` | Display saved credentials |
 
 ### Issues
 
 | Command | Description |
 |---------|-------------|
-| `issue:list` | List/search issues with JQL filters |
-| `issue:view <key>` | View issue details |
-| `issue:create` | Create a new issue |
-| `issue:edit <key>` | Edit issue fields |
-| `issue:move <key>` | Transition issue status |
-| `issue:assign <key> [user]` | Assign issue (use `me` for yourself) |
-| `issue:delete <key>` | Delete an issue |
-| `issue:comment <key>` | Add a comment |
-| `issue:worklog <key>` | Log time or list worklogs |
-| `issue:link <inward> <outward>` | Link two issues |
+| `issue:list` | List/search issues with JQL filters (`--project`, `--type`, `--status`, `--assignee`) |
+| `issue:view <key>` | View issue details (`--comments` to include comments) |
+| `issue:create` | Create a new issue (interactive or via options) |
+| `issue:edit <key>` | Edit issue fields (`--summary`, `--priority`, `--assignee`) |
+| `issue:move <key>` | Transition issue status (`--status` or interactive) |
+| `issue:assign <key> [user]` | Assign issue (`me` for yourself, empty to unassign) |
+| `issue:delete <key>` | Delete an issue (`--force` to skip confirmation) |
+| `issue:comment <key>` | Add a comment (`--body` or interactive) |
+| `issue:worklog <key>` | Log time (`--time=2h`) or list worklogs (`--list`) |
+| `issue:link <inward> <outward>` | Link two issues (`--type` or interactive) |
 | `issue:unlink <linkId>` | Remove an issue link |
 | `issue:clone <key>` | Duplicate an issue |
 | `issue:watch <key>` | Watch an issue |
@@ -132,8 +136,8 @@ Credentials are stored in `~/.jira-cli/config.json` with restricted file permiss
 
 | Command | Description |
 |---------|-------------|
-| `epic:list` | List epics in a project |
-| `epic:create` | Create a new epic |
+| `epic:list` | List epics (`--project=KEY`) |
+| `epic:create` | Create a new epic (interactive or via options) |
 | `epic:add <epic> <issues...>` | Add issues to an epic |
 | `epic:remove <issues...>` | Remove issues from their epic |
 
@@ -141,78 +145,45 @@ Credentials are stored in `~/.jira-cli/config.json` with restricted file permiss
 
 | Command | Description |
 |---------|-------------|
-| `sprint:list` | List sprints for a board |
+| `sprint:list` | List sprints (`--board=ID`, `--state=active\|closed\|future`) |
 | `sprint:add <sprint> <issues...>` | Add issues to a sprint |
-| `sprint:close <sprint>` | Close/complete a sprint |
+| `sprint:close <sprint>` | Close/complete a sprint (`--force` to skip confirmation) |
 
-### Other
+### Boards, Projects & Releases
 
 | Command | Description |
 |---------|-------------|
-| `board:list` | List boards |
+| `board:list` | List boards (`--project` to filter) |
 | `project:list` | List accessible projects |
-| `release:list` | List project versions/releases |
+| `release:list` | List project versions (`--project=KEY`) |
+
+### Utilities
+
+| Command | Description |
+|---------|-------------|
 | `me` | Show current authenticated user |
-| `open [key]` | Open issue/project in the browser |
+| `open [key]` | Open issue or project in the browser |
 | `serverinfo` | Show Jira server information |
-
-## Usage Examples
-
-```bash
-# List issues assigned to me
-php jira issue:list --assignee=me --project=PROJ
-
-# Search with custom JQL
-php jira issue:list --jql="project = PROJ AND status = 'In Progress' ORDER BY priority DESC"
-
-# View issue with comments
-php jira issue:view PROJ-123 --comments
-
-# Create a bug
-php jira issue:create --project=PROJ --type=Bug --summary="Login fails" --priority=High
-
-# Move issue to Done
-php jira issue:move PROJ-123 --status=Done
-
-# Assign to me
-php jira issue:assign PROJ-123 me
-
-# Log 2 hours of work
-php jira issue:worklog PROJ-123 --time=2h --comment="Fixed auth module"
-
-# List active sprints
-php jira sprint:list --board=1 --state=active
-
-# Open issue in browser
-php jira open PROJ-123
-```
-
-## APIs Used
-
-This CLI interacts with two Jira APIs:
-
-- **REST API v3** (`/rest/api/3/`) - Issues, projects, users, comments, worklogs
-- **Agile API v1** (`/rest/agile/1.0/`) - Boards, sprints, epics
 
 ## Development
 
 ```bash
+# Install dependencies
+composer install
+
 # Run tests
+composer test
+
+# Run tests only
 composer test:unit
 
-# Run code style check
-composer test:lint
-
-# Fix code style
+# Code formatting
 ./vendor/bin/pint
 
-# Run static analysis
+# Static analysis
 composer test:types
-
-# Build PHAR
-composer build
 ```
 
 ## License
 
-The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
+Jira CLI is open-source software licensed under the [MIT license](LICENSE).
