@@ -1,0 +1,30 @@
+{
+    "maxResults": 50,
+    "startAt": 0,
+    "values": [
+        {
+            "id": 1,
+            "name": "Sprint 1",
+            "state": "closed",
+            "startDate": "2024-01-01T00:00:00.000Z",
+            "endDate": "2024-01-14T00:00:00.000Z",
+            "goal": "Complete auth module"
+        },
+        {
+            "id": 2,
+            "name": "Sprint 2",
+            "state": "active",
+            "startDate": "2024-01-15T00:00:00.000Z",
+            "endDate": "2024-01-28T00:00:00.000Z",
+            "goal": "Dashboard features"
+        },
+        {
+            "id": 3,
+            "name": "Sprint 3",
+            "state": "future",
+            "startDate": null,
+            "endDate": null,
+            "goal": null
+        }
+    ]
+}

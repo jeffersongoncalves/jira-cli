@@ -1,0 +1,25 @@
+{
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "worklogs": [
+        {
+            "id": "10001",
+            "author": { "displayName": "John Doe" },
+            "timeSpent": "2h",
+            "started": "2024-01-16T09:00:00.000+0000",
+            "comment": {
+                "type": "doc",
+                "version": 1,
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            { "type": "text", "text": "Fixed auth issue" }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

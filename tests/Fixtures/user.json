@@ -1,0 +1,7 @@
+{
+    "accountId": "abc123",
+    "displayName": "John Doe",
+    "emailAddress": "john@example.com",
+    "active": true,
+    "timeZone": "America/Sao_Paulo"
+}

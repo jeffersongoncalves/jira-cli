@@ -1,0 +1,8 @@
+{
+    "maxResults": 50,
+    "startAt": 0,
+    "values": [
+        { "id": 1, "name": "PROJ Board", "type": "scrum" },
+        { "id": 2, "name": "Kanban Board", "type": "kanban" }
+    ]
+}

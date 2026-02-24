@@ -1,0 +1,14 @@
+[
+    {
+        "key": "PROJ",
+        "name": "My Project",
+        "lead": { "displayName": "John Doe" },
+        "projectTypeKey": "software"
+    },
+    {
+        "key": "OPS",
+        "name": "Operations",
+        "lead": { "displayName": "Jane Smith" },
+        "projectTypeKey": "service_desk"
+    }
+]

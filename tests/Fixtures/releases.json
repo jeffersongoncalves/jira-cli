@@ -1,0 +1,16 @@
+[
+    {
+        "id": "10000",
+        "name": "v1.0.0",
+        "released": true,
+        "releaseDate": "2024-01-15",
+        "description": "Initial release"
+    },
+    {
+        "id": "10001",
+        "name": "v2.0.0",
+        "released": false,
+        "releaseDate": null,
+        "description": "Next major version"
+    }
+]

@@ -1,0 +1,8 @@
+{
+    "baseUrl": "https://example.atlassian.net",
+    "version": "1001.0.0",
+    "buildNumber": 100200,
+    "buildDate": "2024-01-15T00:00:00.000+0000",
+    "serverTitle": "Jira Cloud",
+    "deploymentType": "Cloud"
+}

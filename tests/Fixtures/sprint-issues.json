@@ -1,0 +1,20 @@
+{
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "issues": [
+        {
+            "key": "PROJ-1",
+            "fields": {
+                "summary": "Fix login bug",
+                "issuetype": { "name": "Bug" },
+                "status": { "name": "In Progress" },
+                "priority": { "name": "High" },
+                "assignee": { "displayName": "John Doe" },
+                "reporter": { "displayName": "Jane Smith" },
+                "created": "2024-01-15T10:30:00.000+0000",
+                "updated": "2024-01-16T14:00:00.000+0000"
+            }
+        }
+    ]
+}
