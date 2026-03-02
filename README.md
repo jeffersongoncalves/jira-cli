@@ -10,6 +10,7 @@ A modern Jira Cloud CLI built with [Laravel Zero](https://laravel-zero.com/).
 
 <p align="center">
   <a href="https://github.com/jeffersongoncalves/jira-cli/actions"><img src="https://github.com/jeffersongoncalves/jira-cli/actions/workflows/run-tests.yml/badge.svg" alt="Tests" /></a>
+  <a href="https://github.com/jeffersongoncalves/jira-cli/actions"><img src="https://github.com/jeffersongoncalves/jira-cli/actions/workflows/build.yml/badge.svg" alt="Build" /></a>
   <a href="https://packagist.org/packages/jeffersongoncalves/jira-cli"><img src="https://img.shields.io/packagist/dt/jeffersongoncalves/jira-cli" alt="Total Downloads" /></a>
   <a href="https://github.com/jeffersongoncalves/jira-cli/blob/main/LICENSE"><img src="https://img.shields.io/github/license/jeffersongoncalves/jira-cli" alt="License" /></a>
   <img src="https://img.shields.io/badge/php-%3E%3D8.2-8892BF" alt="PHP 8.2+" />
@@ -189,6 +190,10 @@ composer test:unit
 # Static analysis
 composer test:types
 ```
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## License
 
