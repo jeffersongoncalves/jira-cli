@@ -2,6 +2,10 @@
 
 All notable changes to `jira-cli` will be documented in this file.
 
+## v1.0.2 - 2026-06-06
+
+Adopt version.txt release flow (version.txt as version source, no tag-move; concurrency on builds).
+
 ## v1.0.1 - 2026-02-24
 
 ### What's Changed
