@@ -2,6 +2,10 @@
 
 All notable changes to `jira-cli` will be documented in this file.
 
+## v1.0.3 - 2026-06-06
+
+Fix PHAR packaging: keep dev dependencies (laravel-zero/framework) in the binary. Prior releases failed at boot with "Class LaravelZero\Framework\Application not found".
+
 ## v1.0.2 - 2026-06-06
 
 Adopt version.txt release flow (version.txt as version source, no tag-move; concurrency on builds).
