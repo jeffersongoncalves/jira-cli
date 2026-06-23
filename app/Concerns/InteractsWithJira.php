@@ -2,23 +2,14 @@
 
 namespace App\Concerns;
 
-use App\Exceptions\AuthenticationException;
-use App\Exceptions\JiraApiException;
+use JeffersonGoncalves\LaravelZero\Console\HandlesApiErrors;
 
 trait InteractsWithJira
 {
+    use HandlesApiErrors;
+
     protected function handleJiraErrors(callable $callback): int
     {
-        try {
-            return $callback();
-        } catch (AuthenticationException $e) {
-            $this->components->error($e->getMessage());
-
-            return self::FAILURE;
-        } catch (JiraApiException $e) {
-            $this->components->error($e->getMessage());
-
-            return self::FAILURE;
-        }
+        return $this->handleApiErrors($callback);
     }
 }

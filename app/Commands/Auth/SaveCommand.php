@@ -2,6 +2,7 @@
 
 namespace App\Commands\Auth;
 
+use App\DTOs\Credentials;
 use App\Enums\AuthType;
 use App\Services\AuthService;
 use Illuminate\Console\Command;
@@ -51,14 +52,14 @@ class SaveCommand extends Command
             label: 'Default board ID (optional)',
         );
 
-        $authService->save(
-            server: $server,
+        $authService->save(new Credentials(
+            server: rtrim($server, '/'),
             username: $username,
             apiToken: $apiToken,
             authType: AuthType::from($authType),
             project: $project ?: null,
             boardId: $boardId ? (int) $boardId : null,
-        );
+        ));
 
         $this->components->info("Credentials saved to {$authService->getConfigPath()}");
 

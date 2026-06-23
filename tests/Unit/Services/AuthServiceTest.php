@@ -3,17 +3,27 @@
 use App\Services\AuthService;
 
 beforeEach(function () {
-    $this->authService = new AuthService;
     $this->tempDir = sys_get_temp_dir().'/jira-cli-test-'.uniqid();
+    $this->originalHome = $_SERVER['HOME'] ?? null;
+    $_SERVER['HOME'] = $this->tempDir;
+    $this->authService = new AuthService;
 });
 
 afterEach(function () {
-    $configPath = $this->tempDir.'/config.json';
+    $configPath = $this->tempDir.'/.jira-cli/config.json';
     if (file_exists($configPath)) {
         unlink($configPath);
     }
+    if (is_dir($this->tempDir.'/.jira-cli')) {
+        rmdir($this->tempDir.'/.jira-cli');
+    }
     if (is_dir($this->tempDir)) {
         rmdir($this->tempDir);
+    }
+    if ($this->originalHome === null) {
+        unset($_SERVER['HOME']);
+    } else {
+        $_SERVER['HOME'] = $this->originalHome;
     }
 });
 

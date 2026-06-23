@@ -2,29 +2,36 @@
 
 namespace App\Exceptions;
 
-use RuntimeException;
+use JeffersonGoncalves\LaravelZero\ApiClient\ApiException;
 
-class JiraApiException extends RuntimeException
+class JiraApiException extends ApiException
 {
-    public function __construct(
-        string $message = 'Jira API error.',
-        int $code = 0,
-        public readonly ?array $response = null,
-    ) {
-        parent::__construct($message, $code);
-    }
-
-    public static function fromResponse(int $statusCode, array $body): self
+    /**
+     * Pull the human-readable message out of a decoded Jira error body.
+     *
+     * Jira reports errors under "errorMessages" (list) and "errors" (map),
+     * falling back to a plain "message" key for transport-level failures.
+     *
+     * @param  array<string, mixed>  $body
+     */
+    protected static function extractMessage(array $body): string
     {
-        $messages = $body['errorMessages'] ?? [];
-        $errors = $body['errors'] ?? [];
+        $messages = is_array($body['errorMessages'] ?? null) ? $body['errorMessages'] : [];
+        $errors = is_array($body['errors'] ?? null) ? array_values($body['errors']) : [];
 
-        $message = implode('; ', array_merge($messages, array_values($errors)));
+        $combined = array_merge(
+            array_map('strval', $messages),
+            array_map('strval', $errors),
+        );
 
-        if ($message === '') {
-            $message = "HTTP {$statusCode}";
+        if ($combined !== []) {
+            return implode('; ', $combined);
         }
 
-        return new self("Jira API error: {$message}", $statusCode, $body);
+        if (isset($body['message']) && is_string($body['message'])) {
+            return $body['message'];
+        }
+
+        return '';
     }
 }

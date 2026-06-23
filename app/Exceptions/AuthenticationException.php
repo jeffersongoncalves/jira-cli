@@ -2,9 +2,9 @@
 
 namespace App\Exceptions;
 
-use RuntimeException;
+use JeffersonGoncalves\LaravelZero\Credentials\AuthenticationException as BaseAuthenticationException;
 
-class AuthenticationException extends RuntimeException
+class AuthenticationException extends BaseAuthenticationException
 {
     public function __construct(string $message = 'Not authenticated. Run "jira auth:save" first.')
     {

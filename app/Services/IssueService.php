@@ -161,6 +161,7 @@ class IssueService
 
     public function watch(string $issueKey, string $accountId): array
     {
+        // @phpstan-ignore argument.type (Jira's add-watcher endpoint takes the raw accountId payload)
         return $this->jira->post($this->jira->restApi("issue/{$issueKey}/watchers"), [$accountId]);
     }
 

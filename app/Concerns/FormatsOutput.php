@@ -2,47 +2,44 @@
 
 namespace App\Concerns;
 
-use Carbon\Carbon;
+use JeffersonGoncalves\LaravelZero\Console\FormatsOutput as BaseFormatsOutput;
 
 trait FormatsOutput
 {
-    protected function renderTable(array $headers, array $rows): void
-    {
-        if (empty($rows)) {
-            $this->components->info('No results found.');
+    use BaseFormatsOutput;
 
-            return;
-        }
-
-        $this->table($headers, $rows);
-    }
-
+    /**
+     * Resolve a console color for a given Jira state.
+     *
+     * Keeps the original 'gray' fallback for unknown states.
+     */
     protected function stateColor(string $state): string
     {
-        return match (strtolower($state)) {
-            'to do', 'open', 'new', 'future' => 'blue',
-            'in progress', 'active', 'building' => 'yellow',
-            'done', 'closed', 'resolved', 'released' => 'green',
-            'declined', 'rejected', 'blocked' => 'red',
-            default => 'gray',
-        };
+        return $this->stateColors()[strtoupper($state)] ?? 'gray';
     }
 
-    protected function colorize(string $text, string $color): string
+    /**
+     * Jira-specific state -> color map.
+     *
+     * @return array<string, string>
+     */
+    protected function stateColors(): array
     {
-        return "<fg={$color}>{$text}</>";
-    }
-
-    protected function formatDate(?string $dateString): string
-    {
-        if ($dateString === null || $dateString === '') {
-            return '-';
-        }
-
-        try {
-            return Carbon::parse($dateString)->format('Y-m-d H:i');
-        } catch (\Exception) {
-            return $dateString;
-        }
+        return [
+            'TO DO' => 'blue',
+            'OPEN' => 'blue',
+            'NEW' => 'blue',
+            'FUTURE' => 'blue',
+            'IN PROGRESS' => 'yellow',
+            'ACTIVE' => 'yellow',
+            'BUILDING' => 'yellow',
+            'DONE' => 'green',
+            'CLOSED' => 'green',
+            'RESOLVED' => 'green',
+            'RELEASED' => 'green',
+            'DECLINED' => 'red',
+            'REJECTED' => 'red',
+            'BLOCKED' => 'red',
+        ];
     }
 }
