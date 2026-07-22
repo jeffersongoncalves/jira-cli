@@ -2,6 +2,14 @@
 
 All notable changes to `jira-cli` will be documented in this file.
 
+## v1.0.5 - 2026-07-22
+
+### What's Changed
+
+* Bump actions/cache from 5 to 6 by @dependabot[bot] in https://github.com/jeffersongoncalves/jira-cli/pull/5
+
+**Full Changelog**: https://github.com/jeffersongoncalves/jira-cli/compare/v1.0.4...v1.0.5
+
 ## v1.0.4 - 2026-06-23
 
 Add the `self-update` command — update the jira CLI to the latest release directly from the terminal.
