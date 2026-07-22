@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\DTOs\Comment;
+
 class IssueService
 {
     public function __construct(
@@ -85,6 +87,48 @@ class IssueService
     public function getComments(string $issueKey): array
     {
         return $this->jira->get($this->jira->restApi("issue/{$issueKey}/comment"));
+    }
+
+    public function addRichComment(string $issueKey, array $adfContent): array
+    {
+        return $this->jira->post($this->jira->restApi("issue/{$issueKey}/comment"), [
+            'body' => AdfConverter::doc($adfContent),
+        ]);
+    }
+
+    public function updateComment(string $issueKey, string $commentId, array $adfContent): array
+    {
+        return $this->jira->put($this->jira->restApi("issue/{$issueKey}/comment/{$commentId}"), [
+            'body' => AdfConverter::doc($adfContent),
+        ]);
+    }
+
+    public function findCommentIdByMarker(string $issueKey, string $marker): ?string
+    {
+        $comments = $this->getComments($issueKey)['comments'] ?? [];
+
+        foreach ($comments as $data) {
+            if (str_contains(Comment::fromApi($data)->body, $marker)) {
+                return (string) $data['id'];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Create or update (by marker) a rich comment, so re-running with the same marker
+     * edits the existing comment instead of piling up duplicates.
+     */
+    public function upsertComment(string $issueKey, array $adfContent, string $marker): array
+    {
+        $content = array_merge([AdfConverter::paragraph($marker)], $adfContent);
+
+        $existingId = $this->findCommentIdByMarker($issueKey, $marker);
+
+        return $existingId !== null
+            ? $this->updateComment($issueKey, $existingId, $content)
+            : $this->addRichComment($issueKey, $content);
     }
 
     public function addWorklog(string $issueKey, string $timeSpent, ?string $comment = null): array
