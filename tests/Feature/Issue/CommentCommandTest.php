@@ -78,12 +78,16 @@ it('updates the existing comment via --marker when one already matches', functio
 });
 
 it('rejects --marker without --file', function () {
+    $this->app->instance(IssueService::class, Mockery::mock(IssueService::class));
+
     $this->artisan('issue:comment', ['key' => 'PROJ-1', '--marker' => '<!-- marker -->'])
         ->expectsOutputToContain('--marker requires --file')
         ->assertExitCode(1);
 });
 
 it('errors when --file does not exist', function () {
+    $this->app->instance(IssueService::class, Mockery::mock(IssueService::class));
+
     $this->artisan('issue:comment PROJ-1 --file=/no/such/file.md')
         ->expectsOutputToContain('File not found')
         ->assertExitCode(1);
