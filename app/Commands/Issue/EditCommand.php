@@ -3,6 +3,7 @@
 namespace App\Commands\Issue;
 
 use App\Concerns\InteractsWithJira;
+use App\Services\AdfConverter;
 use App\Services\IssueService;
 use Illuminate\Console\Command;
 
@@ -13,6 +14,8 @@ class EditCommand extends Command
     protected $signature = 'issue:edit
         {key : Issue key (e.g. PROJ-123)}
         {--summary= : New summary}
+        {--description= : New description (use - to read from stdin)}
+        {--description-file= : Read new description from a markdown file (- for stdin); supports #/##/### headings and - bullet lists}
         {--priority= : New priority}
         {--assignee= : New assignee account ID}
         {--label=* : Replace labels}
@@ -27,6 +30,20 @@ class EditCommand extends Command
 
             if ($summary = $this->option('summary')) {
                 $fields['summary'] = $summary;
+            }
+
+            if ($descriptionFile = $this->option('description-file')) {
+                $markdown = $this->readTextSource($descriptionFile);
+                if ($markdown === false) {
+                    $this->components->error("File not found: {$descriptionFile}");
+
+                    return self::FAILURE;
+                }
+
+                $fields['description'] = AdfConverter::doc(AdfConverter::fromMarkdown($markdown));
+            } elseif ($description = $this->option('description')) {
+                $description = $description === '-' ? $this->readTextSource('-') : $description;
+                $fields['description'] = AdfConverter::doc([AdfConverter::paragraph($description)]);
             }
 
             if ($priority = $this->option('priority')) {

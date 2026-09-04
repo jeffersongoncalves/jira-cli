@@ -15,8 +15,8 @@ class CommentCommand extends Command
 
     protected $signature = 'issue:comment
         {key : Issue key (e.g. PROJ-123)}
-        {--body= : Comment body}
-        {--file= : Read comment body from a markdown file (supports #/##/### headings and - bullet lists)}
+        {--body= : Comment body (use - to read from stdin)}
+        {--file= : Read comment body from a markdown file (- for stdin); supports #/##/### headings and - bullet lists}
         {--marker= : Idempotency marker; re-running with the same marker edits the existing comment instead of creating a new one (requires --file)}';
 
     protected $description = 'Add a comment to an issue';
@@ -35,13 +35,14 @@ class CommentCommand extends Command
             }
 
             if ($file) {
-                if (! is_file($file)) {
+                $markdown = $this->readTextSource($file);
+                if ($markdown === false) {
                     $this->components->error("File not found: {$file}");
 
                     return self::FAILURE;
                 }
 
-                $content = AdfConverter::fromMarkdown(file_get_contents($file));
+                $content = AdfConverter::fromMarkdown($markdown);
 
                 if ($marker) {
                     $updated = $issueService->findCommentIdByMarker($key, $marker) !== null;
@@ -52,7 +53,9 @@ class CommentCommand extends Command
                     $this->components->info("Comment added to {$key}.");
                 }
             } else {
-                $body = $this->option('body') ?: textarea(label: 'Comment', required: true);
+                $body = $this->option('body');
+                $body = $body === '-' ? $this->readTextSource('-') : $body;
+                $body = $body ?: textarea(label: 'Comment', required: true);
 
                 $issueService->addComment($key, $body);
                 $this->components->info("Comment added to {$key}.");
