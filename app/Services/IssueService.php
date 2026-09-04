@@ -18,7 +18,8 @@ class IssueService
             $query['fields'] = implode(',', $fields);
         }
 
-        return $this->jira->get($this->jira->restApi('search'), $query);
+        // /rest/api/3/search was removed by Atlassian; /search/jql is the replacement (CHANGE-2046).
+        return $this->jira->get($this->jira->restApi('search/jql'), $query);
     }
 
     public function get(string $issueKey, array $fields = []): array

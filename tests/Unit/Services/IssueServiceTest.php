@@ -3,6 +3,19 @@
 use App\Services\IssueService;
 use App\Services\JiraService;
 
+it('searches issues via the search/jql endpoint', function () {
+    $jira = Mockery::mock(JiraService::class);
+    $jira->shouldReceive('restApi')->with('search/jql')->andReturn('search/jql');
+    $jira->shouldReceive('get')
+        ->with('search/jql', ['jql' => 'project = PROJ', 'maxResults' => 20, 'fields' => 'summary,status'])
+        ->once()
+        ->andReturn(['issues' => []]);
+
+    $service = new IssueService($jira);
+
+    $service->search('project = PROJ', fields: ['summary', 'status'], maxResults: 20);
+});
+
 it('finds a comment id by marker in existing comments', function () {
     $jira = Mockery::mock(JiraService::class);
     $jira->shouldReceive('restApi')->with('issue/PROJ-1/comment')->andReturn('issue/PROJ-1/comment');

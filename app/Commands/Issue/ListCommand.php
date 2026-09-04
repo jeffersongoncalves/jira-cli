@@ -66,7 +66,11 @@ class ListCommand extends Command
                 }
             }
 
-            $response = $issueService->search($jql, maxResults: (int) $this->option('limit'));
+            $response = $issueService->search(
+                $jql,
+                fields: ['summary', 'issuetype', 'status', 'priority', 'assignee', 'updated'],
+                maxResults: (int) $this->option('limit'),
+            );
             $issues = array_map(
                 fn (array $data) => Issue::fromApi($data),
                 $response['issues'] ?? []
