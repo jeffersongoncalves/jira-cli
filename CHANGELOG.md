@@ -1,69 +1,158 @@
 # Changelog
 
-All notable changes to `jira-cli` will be documented in this file.
+All notable changes to this project will be documented in this file.
 
-## v1.0.7 - 2026-07-24
+## [1.0.8] - 2026-09-04
 
-Release v1.0.7
+### Bug Fixes
 
-## v1.0.6 - 2026-07-24
+- **deps:** Update guzzlehttp/guzzle to patch security advisories
 
-Release v1.0.6
+### CI/CD
 
-## v1.0.5 - 2026-07-22
+- Pin actions to commit SHA, add dependabot cooldown/composer, trim dist archive
+- **release:** Generate CHANGELOG.md and release notes with git-cliff
 
-### What's Changed
+### Features
 
-* Bump actions/cache from 5 to 6 by @dependabot[bot] in https://github.com/jeffersongoncalves/jira-cli/pull/5
+- **auth:** Add non-interactive options to auth:save
 
-**Full Changelog**: https://github.com/jeffersongoncalves/jira-cli/compare/v1.0.4...v1.0.5
+### Other
 
-## v1.0.4 - 2026-06-23
+- Bump shivammathur/setup-php
 
-Add the `self-update` command — update the jira CLI to the latest release directly from the terminal.
+Bumps [shivammathur/setup-php](https://github.com/shivammathur/setup-php) from b604ade2a87db23f8871b7182e69ec5e75effb45 to f3e473d116dcccaddc5834248c87452386958240.
+- [Release notes](https://github.com/shivammathur/setup-php/releases)
+- [Commits](https://github.com/shivammathur/setup-php/compare/b604ade2a87db23f8871b7182e69ec5e75effb45...f3e473d116dcccaddc5834248c87452386958240)
 
-## v1.0.3 - 2026-06-06
+---
+updated-dependencies:
+- dependency-name: shivammathur/setup-php
+  dependency-version: f3e473d116dcccaddc5834248c87452386958240
+  dependency-type: direct:production
+...
 
-Fix PHAR packaging: keep dev dependencies (laravel-zero/framework) in the binary. Prior releases failed at boot with "Class LaravelZero\Framework\Application not found".
+Signed-off-by: dependabot[bot] <support@github.com>
 
-## v1.0.2 - 2026-06-06
+## [1.0.7] - 2026-07-24
 
-Adopt version.txt release flow (version.txt as version source, no tag-move; concurrency on builds).
+### Bug Fixes
 
-## v1.0.1 - 2026-02-24
+- Mock IssueService in CommentCommand validation tests
 
-### What's Changed
+### Miscellaneous Tasks
 
-- Updated README to match bb-cli format with composer global install instructions
-- Added granular Atlassian API scopes documentation (Jira Platform + Jira Software)
-- Generated build artifact
+- Bump guzzlehttp/guzzle and guzzlehttp/psr7 for security advisories
 
-**Full Changelog**: https://github.com/jeffersongoncalves/jira-cli/compare/v1.0.0...v1.0.1
+## [1.0.6] - 2026-07-24
 
-## v1.0.0 - 2026-02-23
+### CI/CD
 
-### Initial Release
+- Replace split build/changelog/publish-phar workflows with a single release job
 
-Full-featured Jira Cloud CLI built with Laravel Zero.
+## [1.0.5] - 2026-07-22
 
-#### Features
+### Features
 
-- **Authentication**: Basic (email + API token) and Bearer (PAT) support
-- **Issues** (13 commands): list, view, create, edit, move, assign, delete, comment, worklog, link, unlink, clone, watch
-- **Epics** (4 commands): list, create, add/remove issues
-- **Sprints** (3 commands): list, add issues, close
-- **Boards**: list boards with project filtering
-- **Projects**: list accessible projects
-- **Releases**: list project versions
-- **Utilities**: current user info, open in browser, server info
+- Rich comments with markdown and idempotent upsert by marker
 
-#### Technical
+## [1.0.4] - 2026-06-23
 
-- PHP 8.2+ with Laravel Zero 12
-- REST API v3 + Agile API v1
+### Features
+
+- Adicionar comando self-update
+
+### Refactor
+
+- Consume shared laravel-zero-* packages
+
+## [1.0.3] - 2026-06-06
+
+### Bug Fixes
+
+- **build:** Keep dev dependencies in the PHAR
+
+### Miscellaneous Tasks
+
+- Bump version to v1.0.3
+
+## [1.0.2] - 2026-06-06
+
+### CI/CD
+
+- **build:** Serialize builds with a concurrency group to avoid ref-lock race
+- **release:** Use version.txt as the single source of truth for the version
+
+### Miscellaneous Tasks
+
+- Refresh portfolio banner
+- Bump version to v1.0.2
+
+### Other
+
+- Add project banner and update README
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+- Add build badge and changelog section to README
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+- Standardize .gitignore: add .claude/settings.local.json, .phpunit.cache, .env
+- Chain builds after Update Changelog + fix release-tagged rebuild
+
+On the release path, three workflows fan out in parallel: publish-phar,
+Update Changelog, and builds. Update Changelog force-pushes CHANGELOG
+and version.txt, which raced with builds and caused non-fast-forward
+rejections. Worse, the tag created by the release stayed on the commit
+that existed before the PHAR was rebuilt, so `composer require` would
+pull a PHAR with the previous version baked in.
+
+This rewires build.yml to:
+
+- Run via workflow_run after Update Changelog completes successfully,
+  eliminating the race. Regular push on main still triggers.
+- Pin ref and commit branch to main on workflow_run invocations
+  (github.event.workflow_run.head_branch resolves to the tag name for
+  release events and would land the commit on a detached HEAD / fail
+  to push).
+- Resolve the build version from workflow_run.head_branch when running
+  under workflow_run. `git describe --tags --abbrev=0` is unreliable
+  once the pre-release tag and current release tag share a commit.
+- After the rebuild commit lands, move the release tag to that commit
+  so Packagist (and direct git installs) serve the PHAR whose embedded
+  version matches the tag.
+
+Validated end-to-end in the git-worktree-cli sibling repo.
+
+Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+- Delete .github/workflows/dependabot-auto-merge.yml
+
+## [1.0.1] - 2026-02-24
+
+### Other
+
+- Update README to match bb-cli format with composer global install and granular scopes
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+
+## [1.0.0] - 2026-02-24
+
+### Other
+
+- Initial implementation of Jira CLI with Laravel Zero
+
+Full-featured Jira Cloud CLI with 28 commands covering issues, epics, sprints,
+boards, projects, releases, authentication, and browser integration.
+
+- Auth: save/show credentials with Basic and Bearer support
+- Issues: list, view, create, edit, move, assign, delete, comment, worklog, link, unlink, clone, watch
+- Epics: list, create, add/remove issues
+- Sprints: list, add issues, close
+- Boards, Projects, Releases: list commands
+- Utilities: me, open (browser), serverinfo
 - 58 Pest tests with 168 assertions
-- PHPStan level 6 static analysis
-- Laravel Pint code formatting
-- GitHub Actions CI/CD (tests, build, PHAR publish)
+- PHPStan level 6, Laravel Pint formatting
+- GitHub Actions: tests, build, PHPStan, Pint, publish PHAR, changelog
 
-## Unreleased
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+
+
