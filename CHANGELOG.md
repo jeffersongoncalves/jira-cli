@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.9] - 2026-09-04
+
+### Bug Fixes
+
+- **issue:** Migrate issue:list to the /search/jql endpoint
+
+### Features
+
+- **issue:** Support --description-file and stdin for long text fields
+
 ## [1.0.8] - 2026-09-04
 
 ### Bug Fixes
