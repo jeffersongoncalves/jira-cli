@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.10] - 2026-09-08
+
+### Bug Fixes
+
+- **ci:** Publish release as draft until PHAR asset is attached
+
+### Dependencies
+
+- **deps:** Bump orhun/git-cliff-action from 4.8.0 to 4.9.0
+
+### Documentation
+
+- Add Buy Me a Coffee sponsor link
+
+### Miscellaneous Tasks
+
+- Add GitHub Sponsors to FUNDING.yml
+
 ## [1.0.9] - 2026-09-04
 
 ### Bug Fixes
