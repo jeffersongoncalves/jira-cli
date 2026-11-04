@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-11-04
+
+### CI/CD
+
+- Pass release version input through env
+- Standardize dependabot config
+- Standardize tests workflow
+- Remove run-tests.yml (replaced by tests.yml)
+- Standardize tests workflow
+- Auto-merge dependabot github-actions minor/patch
+
+### Dependencies
+
+- **deps:** Bump orhun/git-cliff-action in the actions-deps group (#19)
+- **deps:** Bump shivammathur/setup-php (#20)
+- **deps:** Bump stefanzweifel/git-auto-commit-action (#22)
+
+### Documentation
+
+- Point tests badge to tests.yml
+
+### Miscellaneous Tasks
+
+- **deps-dev:** Bump the composer-deps group with 8 updates
+- **deps-dev:** Bump league/flysystem from 3.31.0 to 3.36.0
+- Upgrade to Laravel Zero 13
+
+### Other
+
+- Auto-assign issues and pull requests
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
 ## [1.0.10] - 2026-09-08
 
 ### Bug Fixes
